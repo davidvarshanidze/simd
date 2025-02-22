@@ -1,0 +1,61 @@
+Overview:
+
+SIMD is primarily geared towards graphics applications and physics calculations that require simple, repetitive calculations of enormous amounts of data.
+How it operates? 
+SIMD is short for Single Instruction/Multiple Data, while the term SIMD operations refers to a computing method that enables processing of multiple data with a single instruction.
+In contrast, the conventional sequential approach using one instruction to process each individual data is called scalar operations.
+
+(a)Scalar Operation:    (b)SIMD Operation:
+a0 + b0 = c0            |a0|   |b0|   |c0|
+a1 + b1 = c1            |a1|   |b1|   |c1|
+a2 + b2 = c2            |a2| + |b2| = |c2|
+a3 + b3 = c3            |a3|   |b3|   |c3|
+a4 + b4 = c4            |a4|   |b4|   |c4|
+
+Scalar vs SIMD Operatrions:
+
+With conventional scalar operations, four add instructions must be executed one after another to obtain the sums as shown in (a)
+Meanwhile, SIMD uses only one add instruction to achieve the same result, as shown in (b)
+Requiring fewer instructions to process a given mass of data, SIMD operations yield higher efficiency than scalar operations.
+
+Restrictions:
+
+Despite the advantage of being able to process multiple data per instruction, SIMD operations can only be applied to certain predefined processing patterns.
+(b)SIMD Operation:
+|a0|   |b0|   |c0|
+|a1|   |b1|   |c1|
+|a2| + |b2| = |c2|
+|a3|   |b3|   |c3|
+|a4|   |b4|   |c4|
+This shows one such pattern where the same add operation is performed for all data.
+
+SIMD operations cannot be used to process multiple data in different ways. A typical example is given below where some data is to be added and other data is to be deducted, multiplied or divided..
+a0 + b0 = c0
+a1 + b1 = c1
+a2 * b2 = c2
+a3 / b3 = c3
+
+Data used in SIMD Programming:
+
+1) Vector types:
+Conventional data types used in the C programming language, such as char, int and float, are called scalar types.
+Data types used for SIMD operations are called vector types. Each vector type has its corresponding scalar type as shown in Table below.
+
+| Vector Type                | Data                                       |
+|----------------------------|--------------------------------------------|
+| __vector unsigned char     | Sixteen unsigned 8-bit data                |
+| __vector signed char       | Sixteen signed 8-bit data                  |
+| __vector unsigned short    | Eight unsigned 16-bit data                 |
+| __vector signed short      | Eight signed 16-bit data                   |
+| __vector unsigned int      | Four unsigned 32-bit data                  |
+| __vector signed int        | Four signed 32-bit data                    |
+| __vector unsigned long long| Two unsigned 64-bit data                   |
+| __vector signed long long  | Two signed 64-bit data                     |
+| __vector float             | Four single-precision floating-point data  |
+| __vector double            | Two double-precision floating-point data   |
+
+2) Vector format(Byte Order*):
+
+Byte Ordering: Refers to sequencing methods used when storing more than 2-byte data in computer memory. The two main types are known as big endian and little endian.
+In the big endian order, the most significant byte (MSB) is stored first, while in the little endian order, the least significant byte (LSB) is stored first. With big endian,
+for example, the 4-byte data “0x12345678” starts with 0x12 and continues through 0x34, 0x56 and 0x78. With little endian, it is recorded in reverse order, 0x78, 0x56, 0x34 and 0x12.
