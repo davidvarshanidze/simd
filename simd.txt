@@ -59,3 +59,19 @@ Data types used for SIMD operations are called vector types. Each vector type ha
 Byte Ordering: Refers to sequencing methods used when storing more than 2-byte data in computer memory. The two main types are known as big endian and little endian.
 In the big endian order, the most significant byte (MSB) is stored first, while in the little endian order, the least significant byte (LSB) is stored first. With big endian,
 for example, the 4-byte data “0x12345678” starts with 0x12 and continues through 0x34, 0x56 and 0x78. With little endian, it is recorded in reverse order, 0x78, 0x56, 0x34 and 0x12.
+
+3) Vector Literal:
+
+A vector literal is written as a parenthesized vector type followed by a curly braced set of constant expressions. The elements of the vector are initialized to the corresponding expression.
+Elements for which no expressions are specified default to 0.
+Vector literals may be used either in initialization statements or as constants in executable statements. Some examples of usage are shown below.
+
+Example1:
+
+Use in variable initialization statement
+__vector signed int va = (__vector signed int) { -2, -1,  1,  2 };
+
+Example2:
+
+Use as a constant in executable statement
+va = vec_add(va, ((__vector signed int) { 1, 2, 3, 4 }));
