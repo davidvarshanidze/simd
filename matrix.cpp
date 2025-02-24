@@ -6,47 +6,48 @@
 const int MATRIX_ROWS = 1000;
 const int MATRIX_COLS = 1000;
 
-void scalarMatrixAdd(const std::vector<std::vector<float>> &a, const std::vector<std::vector<float>> &b, std::vector<std::vector<float>> &result)
+void scalarMatrixAdd(const std::vector<float> &a, const std::vector<float> &b, std::vector<float> &result)
 {
     for (int i = 0; i < MATRIX_ROWS; ++i)
     {
         for (int j = 0; j < MATRIX_COLS; ++j)
         {
-            result[i][j] = a[i][j] + b[i][j];
+            int index = i * MATRIX_COLS + j;
+            result[index] = a[index] + b[index];
         }
     }
 }
 
-void simdMatrixAdd(const std::vector<std::vector<float>> &a, const std::vector<std::vector<float>> &b, std::vector<std::vector<float>> &result)
+void simdMatrixAdd(const std::vector<float> &a, const std::vector<float> &b, std::vector<float> &result)
 {
     __m256 va, vb, vresult;
     for (int i = 0; i < MATRIX_ROWS; ++i)
     {
         for (int j = 0; j < MATRIX_COLS; j += 8)
         {
-            va = _mm256_loadu_ps(&a[i][j]);
-            vb = _mm256_loadu_ps(&b[i][j]);
+            int index = i * MATRIX_COLS + j;
+            va = _mm256_load_ps(&a[index]); // Aligned load
+            vb = _mm256_load_ps(&b[index]);
             vresult = _mm256_add_ps(va, vb);
-            _mm256_storeu_ps(&result[i][j], vresult);
+            _mm256_store_ps(&result[index], vresult); // Aligned store
         }
     }
 }
 
 int main()
 {
-    std::vector<std::vector<float>> a(MATRIX_ROWS, std::vector<float>(MATRIX_COLS));
-    std::vector<std::vector<float>> b(MATRIX_ROWS, std::vector<float>(MATRIX_COLS));
-    std::vector<std::vector<float>> scalarResult(MATRIX_ROWS, std::vector<float>(MATRIX_COLS));
-    std::vector<std::vector<float>> simdResult(MATRIX_ROWS, std::vector<float>(MATRIX_COLS));
+    alignas(32) std::vector<float> a(MATRIX_ROWS * MATRIX_COLS);
+    alignas(32) std::vector<float> b(MATRIX_ROWS * MATRIX_COLS);
+    alignas(32) std::vector<float> scalarResult(MATRIX_ROWS * MATRIX_COLS);
+    alignas(32) std::vector<float> simdResult(MATRIX_ROWS * MATRIX_COLS);
 
     for (int i = 0; i < MATRIX_ROWS; ++i)
     {
         for (int j = 0; j < MATRIX_COLS; ++j)
         {
-            a[i][j] = i + j;
-            b[i][j] = i + j + 1;
-            scalarResult[i][j] = 0;
-            simdResult[i][j] = 0;
+            int index = i * MATRIX_COLS + j;
+            a[index] = i + j;
+            b[index] = i + j + 1;
         }
     }
 
